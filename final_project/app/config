@@ -1,0 +1,9 @@
+APP_HOST = '0.0.0.0'
+APP_PORT = '8081'
+MYSQL_HOST = 'myapp_base'
+MYSQL_PORT = '3306'
+MYSQL_DB = 'vkeducation'
+VK_URL = 'mock:5000'
+
+
+

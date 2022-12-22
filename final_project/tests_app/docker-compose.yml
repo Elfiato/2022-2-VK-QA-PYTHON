@@ -1,0 +1,33 @@
+version: '2.1'
+
+services:
+  myapp_base:
+    environment:
+      MYSQL_ROOT_PASSWORD: 'pass'
+    image: "mysql:latest"
+    ports:
+      - 3307:3306
+    volumes:
+      - /home/evgeny/Projects/vk_qa_auto_final_project/base/:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"-u root", "-p pass", "ping", "-h", "127.0.0.1" ]
+      timeout: 1s
+      retries: 10
+
+  mock:
+    image: "vk_api"
+    ports:
+      - 5001:5000
+
+  app:
+    image: "myapp:latest"
+    ports:
+      - 8082:8081
+    volumes:
+      - /home/evgeny/Projects/vk_qa_auto_final_project/app:/config
+    command: [ "/app/myapp", "--config=/config/config" ]
+    depends_on:
+      myapp_base:
+        condition: service_healthy
+      mock:
+        condition: service_started
